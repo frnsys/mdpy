@@ -11,8 +11,6 @@ def extract_blocks(lines):
     py_block = False
     block = []
     for line in lines:
-        line = line.strip()
-
         # start of py block
         if line.strip() == '```python':
             py_block = True
@@ -21,7 +19,7 @@ def extract_blocks(lines):
                 block = []
 
         # exiting py block
-        elif py_block and line == '```':
+        elif py_block and line.strip() == '```':
             py_block = False
             if block:
                 yield block, 'py'

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mdpy',
-    version='0.0.1',
+    version='0.0.2',
     description='utilities for converting markdown files to ipython notebooks',
     url='https://github.com/frnsys/mdpy',
     author='Francis Tseng (@frnsys)',
