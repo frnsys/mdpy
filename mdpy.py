@@ -28,6 +28,9 @@ def extract_blocks(lines):
         else:
             block.append(line)
 
+    if block:
+        yield block, 'md'
+
 
 def run_py(blocks, interact=False):
     """run the python"""
