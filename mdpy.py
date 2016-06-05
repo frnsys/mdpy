@@ -29,8 +29,8 @@ def extract_blocks(lines):
             block.append(line)
 
 
-def interact(blocks):
-    """run the python and drop into ipython"""
+def run_py(blocks, interact=False):
+    """run the python"""
     blocks = ['\n'.join(block) for block, type in blocks if type == 'py']
     script = '\n'.join(blocks)
 
@@ -39,8 +39,11 @@ def interact(blocks):
     with open(fname, 'w') as f:
         f.write(script)
 
-    # run and drop into script with ipython
-    subprocess.call(['ipython', '-i', fname])
+    if interact:
+        # run and drop into script with ipython
+        subprocess.call(['ipython', '-i', fname])
+    else:
+        subprocess.call(['ipython', fname])
 
 
 def compile_nb(blocks, execute=False):
@@ -48,7 +51,7 @@ def compile_nb(blocks, execute=False):
     nb = nbf.new_notebook()
     cells = []
     for block, type in blocks:
-        block = '\n'.join(block)
+        block = ''.join(block).strip()
         if type == 'md':
             cells.append(nbf.new_markdown_cell(block))
         elif type == 'py':
@@ -86,8 +89,9 @@ def compile(md_file, execute):
 
 @cli.command()
 @click.argument('md_file', type=click.Path(exists=True))
-def run(md_file):
+@click.option('-i', '--interact', is_flag=True, help="open ipython after")
+def run(md_file, interact):
     """execute python in markdown file and drop into ipython"""
     lines = open(md_file, 'r').readlines()
     blocks = extract_blocks(lines)
-    interact(blocks)
+    run_py(blocks, interact=interact)
